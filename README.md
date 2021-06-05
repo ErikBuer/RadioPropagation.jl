@@ -1,7 +1,7 @@
 # RadioPropagation
 The following is implemented:
-Two-Ray propagation model.
-Rain attenuation for frequencies in the range 1-400 GHz.
+- Two-Ray propagation model.
+- Rain attenuation for frequencies in the range 1-400 GHz.
 
 Add as submodule to your project by writing the following to a terminal in the project directory:
 ```
