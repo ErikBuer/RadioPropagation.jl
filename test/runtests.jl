@@ -13,6 +13,3 @@ using RadioPropagation
     @test RadioPropagation.rain_attenuation_db_per_km_circular_pol( 30, 20 ) == 3.6755027981960815;
 end
 
-
-
-
