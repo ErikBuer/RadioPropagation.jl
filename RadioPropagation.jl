@@ -7,7 +7,6 @@ module RadioPropagation
 
 	"""
 	Calculate the two-way two-ray propagation between two points above a flat plane.
-	Intended for radar propagation calculations.
 
 	```julia
 	two_ray_propagation()
