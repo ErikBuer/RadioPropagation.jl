@@ -31,7 +31,7 @@ module RadioPropagation
 
 	"""
 	Empirical model for rain attenuation for frequencies between 1 and 400 GHz, linear polarization.
-	Model uses closest freqyency in the underlying data.
+	Model uses the closest frequency in the underlying data.
 	
 	- M. A. Richards and J. A. Scheer and W. A. Holm, Principles of Modern Radar, SciTech Publishing, 2010.
 
@@ -71,7 +71,7 @@ module RadioPropagation
 
    """
 	Empirical model for rain attenuation for frequencies between 1 and 400 GHz, circular polarization.
-	Model uses closest freqyency in the underlying data.
+	Model uses closest frequency in the underlying data.
 	
 	- M. A. Richards and J. A. Scheer and W. A. Holm, Principles of Modern Radar, SciTech Publishing, 2010.
 
