@@ -15,6 +15,6 @@ git submodule foreach git pull
 
 To include the module in a Julia script, add the following to the file:
 ```julia
-push!( LOAD_PATH, "./NdUtilities/" )
+push!( LOAD_PATH, "./RadioPropagation/" )
 using RadioPropagation
 ```
