@@ -39,7 +39,7 @@ module RadioPropagation
 	plot1 = plot( 	target_range_m, f⁴_db.(F²1)+freespace_loss_db .-bias,
 			 	 	xlabel 	= "Range (one-way) [m]",
 					ylabel 	= "Two-way loss [dB]",
-					title  	= "Freespace VS two-ray propagation.",
+					title  	= "Free-space versus two-ray propagation.",
 					ylims 	= (-30, 6),
 					label 	= "|F|⁴+L, Γ=-1",
 					legend	= true,
@@ -51,7 +51,7 @@ module RadioPropagation
 	plot!( 	target_range_m, freespace_loss_db .-bias,
 	 		label = "L",
 	 		xaxis	=:log )
-	savefig("example_figure")
+	savefig("figures/example_figure")
 
 	```
 
