@@ -18,3 +18,4 @@ To include the module in a Julia script, add the following to the file:
 push!( LOAD_PATH, "./RadioPropagation/" )
 using RadioPropagation
 ```
+![Image](figures/example_figure.png?raw=true)
