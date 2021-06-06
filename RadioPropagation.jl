@@ -7,14 +7,59 @@ module RadioPropagation
 
 	"""
 	Calculate the two-way two-ray propagation between two points above a flat plane.
+	Returns the propagation factor F. The one-way power propagation factor is |F|².
 
 	- Radar Systems Engineering Lecture 5 Propagation through the Atmosphere, IEEE New Hampshire Section IEEE AES Society, 2010
+	
+	```julia
+	# Example code plotting signal strength as function of range, compared to free space power spread
+	using Plots
+
+	c = 3e8;
+
+	transmit_height_m	= 2;
+	receive_height_m	= 10;
+	target_range_m		= LinRange(20, 100, 10000);
+	transmit_frequency_hz =3e9;
+	λ = c/transmit_frequency_hz;
+	Γ1 = -1;
+	Γ2 = -0.6;
+
+	F²( Γ ) = RadioPropagation.two_ray_propagation.( target_range_m, transmit_height_m, receive_height_m, transmit_frequency_hz, Γ );
+
+	F²1 = F²( Γ1 );
+	F²2 = F²( Γ2 );
+
+	f⁴_db( F² ) = 10*log10.( abs2.( F² ));
+
+	freespace_loss_db = 10 .*log10.(λ^2 ./( (4*π)^3 .*target_range_m .^4 ));
+	bias = freespace_loss_db[1]
+
+
+	plot1 = plot( 	target_range_m, f⁴_db.(F²1)+freespace_loss_db .-bias,
+			 	 	xlabel 	= "Range (one-way) [m]",
+					ylabel 	= "Two-way loss [dB]",
+					title  	= "Freespace VS two-ray propagation.",
+					ylims 	= (-30, 6),
+					label 	= "|F|⁴+L, Γ=-1",
+					legend	= true,
+					xaxis	=:log,
+					dpi=300)
+	plot!( 	target_range_m, f⁴_db.(F²2)+freespace_loss_db .-bias,
+	 		label = "|F|⁴+L, Γ=-0.6",
+	 		xaxis	=:log )
+	plot!( 	target_range_m, freespace_loss_db .-bias,
+	 		label = "L",
+	 		xaxis	=:log )
+	savefig("example_figure")
+
+	```
 
 	# Arguments
 	- 'distance'            The distance parallel to the plane earth.
 	- 'transmit_height'     The height of the transmitter above the plane earth.
 	- 'receive_height'      The height of the receiver/target above the plane earth.
-	- 'Γ'                           The reflection coefficient of the medium of the plane earth. -1 < Γ < 1.
+	- 'Γ'                           The reflection coefficient of the medium of the plane earth.
 	"""
 	function two_ray_propagation( distance, transmit_height, receive_height, frequency_hz, Γ )
 		λ = c/frequency_hz;
@@ -24,7 +69,7 @@ module RadioPropagation
 	end
 
 	"""
-	Empirical model for rain attenuation for frequencies between 1 and 400 GHz, linear polarization.
+	Empirical model for RF rain attenuation for frequencies between 1 and 400 GHz, linear polarization.
 	Model uses the closest frequency in the underlying data.
 	
 	- M. A. Richards and J. A. Scheer and W. A. Holm, Principles of Modern Radar, SciTech Publishing, 2010.
