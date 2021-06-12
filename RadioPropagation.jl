@@ -81,7 +81,7 @@ module RadioPropagation
 
 	# Arguments
 	- 'polarization'        The polarization, 'v', 'h'.
-	- 'frequency_hz'     	The frequency of the propagating waves.
+	- 'frequency_ghz'     	The frequency of the propagating waves.
 	- 'fall_rate_mm_hour'	The rain intensity [mm/h]. 
 	"""
 	function rain_attenuation_db_per_km( polarization::Char, frequency_ghz, fall_rate_mm_hour )
@@ -111,6 +111,7 @@ module RadioPropagation
    """
 	Empirical model for rain attenuation for frequencies between 1 and 400 GHz, circular polarization.
 	Model uses closest frequency in the underlying data.
+	One-way attenuation in dB/km.
 	
 	- M. A. Richards and J. A. Scheer and W. A. Holm, Principles of Modern Radar, SciTech Publishing, 2010.
 
@@ -120,7 +121,7 @@ module RadioPropagation
 	```
 
 	# Arguments
-	- 'frequency_hz'     	The frequency of the propagating waves.
+	- 'frequency_ghz'     	The frequency of the propagating waves.
 	- 'fall_rate_mm_hour'	The rain intensity [mm/h]. 
 	"""
 	function rain_attenuation_db_per_km_circular_pol( frequency_ghz, fall_rate_mm_hour )
@@ -131,5 +132,31 @@ module RadioPropagation
 		α = 1/sqrt(2) * sqrt(αv^2+αh^2);
 
 		return α;
-   end
+	end
+
+	"""
+	Empirical model for rain attenuation for frequencies above 5 GHz.
+	One-way attenuation in dB/km.
+		
+	- M. A. Richards and J. A. Scheer and W. A. Holm, Principles of Modern Radar, SciTech Publishing, 2010.
+
+	```julia
+	fog_attenuation_db_per_km_circular_pol( 10, 0.8, 23 );
+	4.68976
+	```
+
+	# Arguments
+	- 'frequency_ghz'	The frequency of the propagating waves.
+	- 'M'				The watewater concentration in g/m³.
+	- 'T_deg'			The air temperature in degree Celsius.
+	"""
+	function fog_attenuation_db_per_km_circular_pol( frequency_ghz, M, T_deg )
+		T = T_deg;
+		f = frequency_ghz
+
+		α= M*( -1.347 + 0.66*f+(11.152/f) - 0.022*T )
+		return α;
+	end
+
+
 end
