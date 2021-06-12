@@ -2,6 +2,7 @@
 The following is implemented:
 - Two-Ray propagation model.
 - Rain attenuation for frequencies in the range 1-400 GHz.
+- Fog attenuation for frequencies above 5 GHz.
 
 Add as submodule to your project by writing the following to a terminal in the project directory:
 ```
