@@ -150,7 +150,31 @@ module RadioPropagation
 	- 'M'				The watewater concentration in g/m³.
 	- 'T_deg'			The air temperature in degree Celsius.
 	"""
-	function fog_attenuation_db_per_km_circular_pol( frequency_ghz, M, T_deg )
+	function fog_attenuation_db_per_km( frequency_ghz, M, T_deg )
+		T = T_deg;
+		f = frequency_ghz
+
+		α= M*( -1.347 + 0.66*f+(11.152/f) - 0.022*T )
+		return α;
+	end
+	
+	"""
+	Empirical model for rain attenuation for frequencies above 5 GHz.
+	One-way attenuation in dB/km.
+		
+	- M. A. Richards and J. A. Scheer and W. A. Holm, Principles of Modern Radar, SciTech Publishing, 2010.
+
+	```julia
+	fog_attenuation_db_per_km( 10, 0.8, 23 );
+	4.68976
+	```
+
+	# Arguments
+	- 'frequency_ghz'	The frequency of the propagating waves.
+	- 'M'				The watewater concentration in g/m³.
+	- 'T_deg'			The air temperature in degree Celsius.
+	"""
+	function dust_attenuation_db_per_km_circular_pol( frequency_ghz, M, T_deg )
 		T = T_deg;
 		f = frequency_ghz
 
