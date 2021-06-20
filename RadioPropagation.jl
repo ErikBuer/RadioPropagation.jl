@@ -282,34 +282,29 @@ module RadioPropagation
 		b6  = @view tab2[:,7];
 
 
-		S_o(i) = a1[i]*10^(-7)*θ^3*exp(a2[i] (1-θ));
-		S_w(i) = b1[i]*10^(-1)*e*\theta^3.5*exp(b2[i] (1-θ));
+		S_o		= @. a1*10^(-7)*θ^3*exp( a2*(1-θ));
+		S_w		= @. b1*10^(-1)*e*θ^3.5*exp(b2*(1-θ));
 		
-		f_(i) =  # TODO
-		Δf_o  = a3*10^(-4) *(p*θ^(0.8-a4) + 1.1*e*θ);
-		Δf_o  = \sqrt( Δf_o^2 + 2.25*10^(-6) );
+		Δf_o	= @. a3*10^(-4) *(p*θ^(0.8-a4) + 1.1*e*θ);
+		#Δf_o	= @. sqrt( Δf_o_^2 + 2.25*10^(-6) );
 
-		Δf_w  = b3*10^(-4) *(p*θ^(b4) + b5*e*θ^b6);
-		Δf_w  = 0.535*Δf_w + sqrt( 0.217*Δf_w^2 + (2.1316*10^(-12*f_(i)^2)/ θ) )
+		Δf_w	= @. b3*10^(-4) *(p*θ^(b4) + b5*e*θ^b6);
+		#Δf_w	= @. 0.535*Δf_w_ + sqrt( 0.217*Δf_w_^2 + (2.1316*10^(-12*f0b^2)/ θ) )
 
-		function δ(f)
-			
-			return α;
-		end
+		δ_o		= @. (a5+a6*θ)*10^(-4) *(p+e)*θ^(0.8);
+		δ_w		= 0;
 
+		F_o		= @. f/f0a *( (Δf_o-δ_o*(f0a-f))/((f0a-f)^2 + Δf_o^2 ) + (Δf_o-δ_o*(f0a-f))/((f0a+f)^2 + Δf_o^2) );
+		F_w		= @. f/f0b *( (Δf_w-δ_w*(f0b-f))/((f0b-f)^2 + Δf_w^2 ) + (Δf_w-δ_w*(f0b-f))/((f0b+f)^2 + Δf_w^2) );
 		
-		# TODO handle Δf_o and Δf_w
-		F(i) = f/f_(i) *( (Δf-δ(f_(i)-f))/((f_(i)-f)^2 + Δf^2 ) + (Δf-δ(f_(i)-f))/((f_(i)+f)^2 + Δf^2) );
+		d		= 5.6*10^(-4) * (p+e)*θ^0.8;
 		
-		d = 5.6*10^-4 * (p+e)*θ^0.8;
-		N_D_prime(f) = f*p*θ^2 * ( (6.14*10^-5/( d*(1+(f/d)^2) )) + ( (1.4*10^-12 *p*θ^1.5) / ( 1+1.9*10^5 f^1.5 ) ) );
-		
-		i = #TODO
+		N_D_prime = f*p*θ^2 * ( (6.14*10^(-5) / ( d*(1+(f/d)^2) )) +  (1.4*10^(-12) *p*θ^1.5) / ( 1+1.9*10^(-5) *f^1.5 ) );
 
-		N_d_prime_oxygen(f) = sum(S_o(i)*F_o(i))+N_D_prime(f);
-		N_d_prime_water_vapour(f) = S_w(i)*F_w(i);
+		N_d_prime_oxygen		= sum( S_o.*F_o )+N_D_prime;
+		N_d_prime_water_vapour	= sum( S_w.*F_w );
 		
-		γ = 0.1820*f*(N_d_prime_oxygen(f)+N_d_prime_water_vapour(f));
+		γ = 0.1820*f*(N_d_prime_oxygen+N_d_prime_water_vapour);
 		return γ;
 	end
 end
