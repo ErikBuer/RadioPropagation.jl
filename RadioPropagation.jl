@@ -171,7 +171,7 @@ module RadioPropagation
 
 	# Arguments
 	- 'frequency_ghz'	The frequency of the propagating waves.
-	- 
+	- 'T_kelvin'		The absolute temperature in kelvin.
 	"""
 	function atmostpheric_attenuation_db_per_km( frequency_ghz, T_kelvin=288.15, waper_density_g_m³=7.5, dry_air_pressure_h_pa=1013.25 )
 		f = frequency_ghz;
@@ -285,7 +285,7 @@ module RadioPropagation
 		S_o(i) = a1[i]*10^(-7)*θ^3*exp(a2[i] (1-θ));
 		S_w(i) = b1[i]*10^(-1)*e*\theta^3.5*exp(b2[i] (1-θ));
 		
-		f_(i) = 
+		f_(i) =  # TODO
 		Δf_o  = a3*10^(-4) *(p*θ^(0.8-a4) + 1.1*e*θ);
 		Δf_o  = \sqrt( Δf_o^2 + 2.25*10^(-6) );
 
@@ -302,8 +302,11 @@ module RadioPropagation
 		F(i) = f/f_(i) *( (Δf-δ(f_(i)-f))/((f_(i)-f)^2 + Δf^2 ) + (Δf-δ(f_(i)-f))/((f_(i)+f)^2 + Δf^2) );
 		
 		d = 5.6*10^-4 * (p+e)*θ^0.8;
-		N_d_prime(f) = f*p*θ^2 * ( (6.14*10^-5/( d*(1+(f/d)^2) )) + ( (1.4*10^-12 *p*θ^1.5) / ( 1+1.9*10^5 f^1.5 ) ) );
-		N_d_prime_oxygen(f) = S_o(i)*F_o(i)+N_d_prime(f);
+		N_D_prime(f) = f*p*θ^2 * ( (6.14*10^-5/( d*(1+(f/d)^2) )) + ( (1.4*10^-12 *p*θ^1.5) / ( 1+1.9*10^5 f^1.5 ) ) );
+		
+		i = #TODO
+
+		N_d_prime_oxygen(f) = sum(S_o(i)*F_o(i))+N_D_prime(f);
 		N_d_prime_water_vapour(f) = S_w(i)*F_w(i);
 		
 		γ = 0.1820*f*(N_d_prime_oxygen(f)+N_d_prime_water_vapour(f));
