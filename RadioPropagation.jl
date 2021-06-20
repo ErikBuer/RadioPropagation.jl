@@ -159,25 +159,39 @@ module RadioPropagation
 	end
 
 	"""
-	Empirical model for amostpheric gaseous attenuation for frequencies in the range 1 - 1000 GHz.
+	Empirical model for amospheric gaseous attenuation for frequencies in the range 1 - 1000 GHz.
 	One-way attenuation in dB/km.
 		
 	- Rec. ITU-R P.676-12, Attenuation by atmospheric gases and related effects, ITU-R 2020.
-
 	
 	```julia
-	
+	using Plots
+
+	frequency_ghz = collect(1:1000);
+
+	attenuation_db_km = RadioPropagation.atmospheric_attenuation_db_per_km.( frequency_ghz );
+
+	plot1 = plot(	frequency_ghz, attenuation_db_km,
+					xlabel 	= "Frequency [GHz]",
+					ylabel 	= "One-way loss [dB/km]",
+					title  	= "Atmostpheric Attenuation.",
+					#ylims 	= (),
+					label 	= "Standard",
+					yaxis=:log);
 	```
 
 	# Arguments
-	- 'frequency_ghz'	The frequency of the propagating waves.
-	- 'T_kelvin'		The absolute temperature in kelvin.
+	- 'frequency_ghz'				The frequency of the propagating waves.
+	- 'T_kelvin'					The absolute temperature in kelvin.
+	- 'water_vapour_density_g_m³' 	The water vapur density in g/m³.
+	- 'dry_air_pressure_h_pa' 		The dry air pressure in hpa.
 	"""
-	function atmostpheric_attenuation_db_per_km( frequency_ghz, T_kelvin=288.15, waper_density_g_m³=7.5, dry_air_pressure_h_pa=1013.25 )
+	function atmospheric_attenuation_db_per_km( frequency_ghz, T_kelvin=288.15, water_vapour_density_g_m³=7.5, dry_air_pressure_h_pa=1013.25 )
 		f = frequency_ghz;
 		T = T_kelvin;
+		ρ = water_vapour_density_g_m³;
 		p = dry_air_pressure_h_pa;	# Dry air pressure [hPa].
-		e = p*T/216.7;				# Water vapour partial pressure [hPa].
+		e = ρ*T/216.7;				# Water vapour partial pressure [hPa].
 		θ = 300/T;
 
 		# Spectroscopic data for oxygen attenuation.
@@ -282,26 +296,26 @@ module RadioPropagation
 		b6  = @view tab2[:,7];
 
 
-		S_o		= @. a1*10^(-7)*θ^3*exp( a2*(1-θ));
+		S_o		= @. a1*10^(-7)*p*θ^3*exp( a2*(1-θ));
 		S_w		= @. b1*10^(-1)*e*θ^3.5*exp(b2*(1-θ));
 		
-		Δf_o	= @. a3*10^(-4) *(p*θ^(0.8-a4) + 1.1*e*θ);
-		#Δf_o	= @. sqrt( Δf_o_^2 + 2.25*10^(-6) );
+		Δf_o_	= @. a3*10^(-4) *(p*θ^(0.8-a4) + 1.1*e*θ);
+		Δf_o	= @. sqrt( Δf_o_^2 + 2.25*10^(-6) );
 
-		Δf_w	= @. b3*10^(-4) *(p*θ^(b4) + b5*e*θ^b6);
-		#Δf_w	= @. 0.535*Δf_w_ + sqrt( 0.217*Δf_w_^2 + (2.1316*10^(-12*f0b^2)/ θ) )
+		Δf_w_	= @. b3*10^(-4) *(p*θ^b4 + b5*e*θ^b6);
+		Δf_w	= @. 0.535*Δf_w_ + sqrt( 0.217*Δf_w_^2 + (2.1316*10^-12*f0b^2)/ θ );
 
 		δ_o		= @. (a5+a6*θ)*10^(-4) *(p+e)*θ^(0.8);
 		δ_w		= 0;
 
-		F_o		= @. f/f0a *( (Δf_o-δ_o*(f0a-f))/((f0a-f)^2 + Δf_o^2 ) + (Δf_o-δ_o*(f0a-f))/((f0a+f)^2 + Δf_o^2) );
-		F_w		= @. f/f0b *( (Δf_w-δ_w*(f0b-f))/((f0b-f)^2 + Δf_w^2 ) + (Δf_w-δ_w*(f0b-f))/((f0b+f)^2 + Δf_w^2) );
+		F_o		= @. f/f0a *( (Δf_o-δ_o*(f0a-f))/((f0a-f)^2 + Δf_o^2 ) + (Δf_o-δ_o*(f0a+f))/((f0a+f)^2 + Δf_o^2) );
+		F_w		= @. f/f0b *( (Δf_w-δ_w*(f0b-f))/((f0b-f)^2 + Δf_w^2 ) + (Δf_w-δ_w*(f0b+f))/((f0b+f)^2 + Δf_w^2) );
 		
 		d		= 5.6*10^(-4) * (p+e)*θ^0.8;
 		
 		N_D_prime = f*p*θ^2 * ( (6.14*10^(-5) / ( d*(1+(f/d)^2) )) +  (1.4*10^(-12) *p*θ^1.5) / ( 1+1.9*10^(-5) *f^1.5 ) );
 
-		N_d_prime_oxygen		= sum( S_o.*F_o )+N_D_prime;
+		N_d_prime_oxygen		= sum( S_o.*F_o) + N_D_prime;
 		N_d_prime_water_vapour	= sum( S_w.*F_w );
 		
 		γ = 0.1820*f*(N_d_prime_oxygen+N_d_prime_water_vapour);
