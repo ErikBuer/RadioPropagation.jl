@@ -1,65 +1,37 @@
 module RadioPropagation
-	# using Plots
-	using Printf
+
+	export two_ray_propagation
+	export rain_attenuation_db_per_km
+	export rain_attenuation_db_per_km_circular_pol
+	export fog_attenuation_db_per_km
+	export atmospheric_attenuation_db_per_km
 
 	c = 299792458; # m/s
 	i = im;
 
 	"""
+
+		two_ray_propagation( distance, transmit_height, receive_height, frequency_hz, Γ )
+	
 	Calculate the two-way two-ray propagation between two points above a flat plane.
 	Returns the propagation factor F. The one-way power propagation factor is |F|².
 
-	- Radar Systems Engineering Lecture 5 Propagation through the Atmosphere, IEEE New Hampshire Section IEEE AES Society, 2010
-	
-	```julia
-	# Example code plotting signal strength as function of range, compared to free space power spread
-	using Plots
+	# Arguments
+	- 'distance'       	The distance parallel to the plane earth.
+	- 'transmit_height'	The height of the transmitter above the plane earth.
+	- 'receive_height' 	The height of the receiver/target above the plane earth.
+	- 'Γ'             	The reflection coefficient of the medium of the plane earth.
 
-	c = 3e8;
+	## Examples
 
-	transmit_height_m	= 2;
-	receive_height_m	= 10;
-	target_range_m		= LinRange(20, 100, 10000);
-	transmit_frequency_hz =3e9;
-	λ = c/transmit_frequency_hz;
-	Γ1 = -1;
-	Γ2 = -0.6;
-
-	F²( Γ ) = RadioPropagation.two_ray_propagation.( target_range_m, transmit_height_m, receive_height_m, transmit_frequency_hz, Γ );
-
-	F²1 = F²( Γ1 );
-	F²2 = F²( Γ2 );
-
-	f⁴_db( F² ) = 10*log10.( abs2.( F² ));
-
-	freespace_loss_db = 10 .*log10.(λ^2 ./( (4*π)^3 .*target_range_m .^4 ));
-	bias = freespace_loss_db[1]
-
-
-	plot1 = plot( 	target_range_m, f⁴_db.(F²1)+freespace_loss_db .-bias,
-			 	 	xlabel 	= "Range (one-way) [m]",
-					ylabel 	= "Two-way loss [dB]",
-					title  	= "Free-space versus two-ray propagation.",
-					ylims 	= (-30, 6),
-					label 	= "|F|⁴+L, Γ=-1",
-					legend	= true,
-					xaxis	=:log,
-					dpi=300)
-	plot!( 	target_range_m, f⁴_db.(F²2)+freespace_loss_db .-bias,
-	 		label = "|F|⁴+L, Γ=-0.6",
-	 		xaxis	=:log )
-	plot!( 	target_range_m, freespace_loss_db .-bias,
-	 		label = "L",
-	 		xaxis	=:log )
-	savefig("figures/example_figure")
-
+	```jldoctest
+	julia> two_ray_propagation( 2e3, 10, 12, 20e9, -1 )
+	1.9993946082759417 + 0.03479104696580754im
 	```
 
-	# Arguments
-	- 'distance'            The distance parallel to the plane earth.
-	- 'transmit_height'     The height of the transmitter above the plane earth.
-	- 'receive_height'      The height of the receiver/target above the plane earth.
-	- 'Γ'                           The reflection coefficient of the medium of the plane earth.
+	## References
+
+	- Radar Systems Engineering Lecture 5 Propagation through the Atmosphere, IEEE New Hampshire Section IEEE AES Society, 2010
 	"""
 	function two_ray_propagation( distance, transmit_height, receive_height, frequency_hz, Γ )
 		λ = c/frequency_hz;
@@ -69,22 +41,30 @@ module RadioPropagation
 	end
 
 	"""
+
+		rain_attenuation_db_per_km( polarization::Symbol, frequency_ghz, fall_rate_mm_hour )
+
 	Empirical model for RF rain attenuation for frequencies between 1 and 400 GHz, linear polarization.
 	Model uses the closest frequency in the underlying data.
-	
-	- M. A. Richards and J. A. Scheer and W. A. Holm, Principles of Modern Radar, SciTech Publishing, 2010.
 
-	```julia
-	rain_attenuation_db_per_km_circular_pol( 'v' , 30, 20 )
+	# Arguments
+
+	- 'polarization'        The polarization, `:vertical`, `:horizontal`.
+	- 'frequency_ghz'     	The frequency of the propagating waves.
+	- 'fall_rate_mm_hour'	The rain intensity [mm/h]. 
+
+	## Examples
+
+	```jldoctest
+	julia> rain_attenuation_db_per_km( :vertical , 30, 20 )
 	3.3400000000000003
 	```
 
-	# Arguments
-	- 'polarization'        The polarization, 'v', 'h'.
-	- 'frequency_ghz'     	The frequency of the propagating waves.
-	- 'fall_rate_mm_hour'	The rain intensity [mm/h]. 
+	## References
+
+	- M. A. Richards and J. A. Scheer and W. A. Holm, Principles of Modern Radar, SciTech Publishing, 2010.
 	"""
-	function rain_attenuation_db_per_km( polarization::Char, frequency_ghz, fall_rate_mm_hour )
+	function rain_attenuation_db_per_km( polarization::Symbol, frequency_ghz, fall_rate_mm_hour )
 		r = fall_rate_mm_hour;
 		
 		# Empirical data:
@@ -96,38 +76,48 @@ module RadioPropagation
 
 		# TODO implement interpolation vor arbitrary frequency selection.
 		index = argmin( abs.(  frequency_ghz.-frequency_table_ghz ) );
-		if polarization == 'v'
+		if polarization == :vertical
 			a = av[index];
 			b = bv[index];
-		else
+		elseif polarization == :horizontal
 			a = ah[index];
 			b = bh[index];
+		else
+			throw( ArgumentError("Polarization must be either :vertical or :horizontal") );
 		end
 
 		α = a*r^b;
 		return α;
    end
 
-   """
+	"""
+
+		rain_attenuation_db_per_km_circular_pol( frequency_ghz, fall_rate_mm_hour )
+
 	Empirical model for rain attenuation for frequencies between 1 and 400 GHz, circular polarization.
 	Model uses closest frequency in the underlying data.
 	One-way attenuation in dB/km.
-	
-	- M. A. Richards and J. A. Scheer and W. A. Holm, Principles of Modern Radar, SciTech Publishing, 2010.
 
-	```julia
-	rain_attenuation_db_per_km_circular_pol( 30, 20 )
+	# Arguments
+
+	- 'frequency_ghz'     	The frequency of the propagating waves.
+	- 'fall_rate_mm_hour'	The rain intensity [mm/h]. 
+
+	## Examples
+
+	```jldoctest
+	julia> rain_attenuation_db_per_km_circular_pol( 30, 20 )
 	3.6755027981960815
 	```
 
-	# Arguments
-	- 'frequency_ghz'     	The frequency of the propagating waves.
-	- 'fall_rate_mm_hour'	The rain intensity [mm/h]. 
+	## References
+
+	- M. A. Richards and J. A. Scheer and W. A. Holm, Principles of Modern Radar, SciTech Publishing, 2010.
 	"""
 	function rain_attenuation_db_per_km_circular_pol( frequency_ghz, fall_rate_mm_hour )
 		α_lin( pol ) = rain_attenuation_db_per_km( pol, frequency_ghz, fall_rate_mm_hour );
-		αv = α_lin('v');
-		αh = α_lin('h');
+		αv = α_lin(:vertical);
+		αh = α_lin(:horizontal);
 		
 		α = 1/sqrt(2) * sqrt(αv^2+αh^2);
 
@@ -135,20 +125,28 @@ module RadioPropagation
 	end
 
 	"""
+
+		fog_attenuation_db_per_km( frequency_ghz, M, T_deg )
+
 	Empirical model for rain attenuation for frequencies above 5 GHz.
 	One-way attenuation in dB/km.
-		
-	- M. A. Richards and J. A. Scheer and W. A. Holm, Principles of Modern Radar, SciTech Publishing, 2010.
 
-	```julia
-	fog_attenuation_db_per_km_circular_pol( 10, 0.8, 23 );
-	4.68976
-	```
+	# Arguments
 
-	# Arguments
 	- 'frequency_ghz'	The frequency of the propagating waves.
 	- 'M'				The watewater concentration in g/m³.
 	- 'T_deg'			The air temperature in degree Celsius.
+
+	## Examples
+
+	```jldoctest
+	julia> fog_attenuation_db_per_km( 10, 0.8, 23 )
+	4.68976
+	```
+
+	## References
+
+	- M. A. Richards and J. A. Scheer and W. A. Holm, Principles of Modern Radar, SciTech Publishing, 2010.
 	"""
 	function fog_attenuation_db_per_km( frequency_ghz, M, T_deg )
 		T = T_deg;
@@ -159,32 +157,29 @@ module RadioPropagation
 	end
 
 	"""
+
+		atmospheric_attenuation_db_per_km( frequency_ghz, T_kelvin=288.15, water_vapour_density_g_m³=7.5, dry_air_pressure_h_pa=1013.25 )
+
 	Empirical model for amospheric gaseous attenuation for frequencies in the range 1 - 1000 GHz.
 	One-way attenuation in dB/km.
-		
-	- Rec. ITU-R P.676-12, Attenuation by atmospheric gases and related effects, ITU-R 2020.
-	
-	```julia
-	using Plots
 
-	frequency_ghz = collect(1:1000);
+	# Arguments
 
-	attenuation_db_km = RadioPropagation.atmospheric_attenuation_db_per_km.( frequency_ghz );
-
-	plot1 = plot(	frequency_ghz, attenuation_db_km,
-					xlabel 	= "Frequency [GHz]",
-					ylabel 	= "One-way loss [dB/km]",
-					title  	= "Atmostpheric Attenuation.",
-					#ylims 	= (),
-					label 	= "Standard",
-					yaxis=:log);
-	```
-
-	# Arguments
 	- 'frequency_ghz'				The frequency of the propagating waves.
 	- 'T_kelvin'					The absolute temperature in kelvin.
 	- 'water_vapour_density_g_m³' 	The water vapur density in g/m³.
 	- 'dry_air_pressure_h_pa' 		The dry air pressure in hpa.
+
+	## Examples
+
+	```jldoctest
+	julia> atmospheric_attenuation_db_per_km( 22 )
+	0.18733725630231204
+	```
+
+	## References
+
+	- Rec. ITU-R P.676-12, Attenuation by atmospheric gases and related effects, ITU-R 2020.
 	"""
 	function atmospheric_attenuation_db_per_km( frequency_ghz, T_kelvin=288.15, water_vapour_density_g_m³=7.5, dry_air_pressure_h_pa=1013.25 )
 		f = frequency_ghz;

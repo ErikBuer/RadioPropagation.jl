@@ -1,0 +1,13 @@
+name = "RadioPropagation"
+uuid = "b7825cb4-7108-404a-9145-f310ea34db32"
+authors = ["Erik Buer <buer94@gmail.com>"]
+version = "0.1.0"
+
+[deps]
+
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
