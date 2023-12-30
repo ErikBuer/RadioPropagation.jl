@@ -1,5 +1,5 @@
 # RadioPropagation.jl Documentation
 
 ```@autodocs
-Modules = [..RadioPropagation]
+Modules = [RadioPropagation]
 ```

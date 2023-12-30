@@ -2,17 +2,16 @@
 
 Lets recreate the classic atmospheric attenuation figure from [1].
 
-```@Example AtmostphericAtten
-using RadioPropagation
+```@example AtmostphericAtten
+using ..RadioPropagation
 using Plots
 
-frequency_ghz = collect(1:1000);
+frequency_ghz = collect(1:600);
 
 
 attenuation_db_km = RadioPropagation.atmospheric_attenuation_db_per_km.( frequency_ghz );
 
-
-plot1 = plot(
+plot(
     frequency_ghz, attenuation_db_km,
     xlabel  = "Frequency [GHz]",
     ylabel  = "One-way loss [dB/km]",
@@ -30,10 +29,10 @@ plot!(  frequency_ghz, attenuation_db_km,
         yaxis=:log,
 )
 
-savefig("attenuation_example.svg")
+savefig("attenuation_example.svg"); nothing # hide
 ```
 
-[]("attenuation_example.svg")
+![Atmostpheric attenuation image](attenuation_example.svg)
 
 ## References
 

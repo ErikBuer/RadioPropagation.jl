@@ -1,9 +1,15 @@
-using Documenter, RadioPropagation
+push!(LOAD_PATH,"../src/")
+
+using Documenter
+
+if LOCAL
+    include("../src/RadioPropagation.jl")
+    using .RadioPropagation
+else
+    using RadioPropagation
+end
 
 DocMeta.setdocmeta!(RadioPropagation, :DocTestSetup, :(using RadioPropagation); recursive=true)
-
-include("../src/RadioPropagation.jl")
-using .RadioPropagation
 
 makedocs(
     modules = [RadioPropagation],
@@ -11,13 +17,14 @@ makedocs(
     sitename = "RadioPropagation.jl",
     pages = Any[
         "index.md",
+        "Examples"  => Any[ 
+                        "Examples/atmospheric_attenuation.md",
+                    ],
     ],
+    doctest  = true,
 )
 
 deploydocs(
     repo = "https://github.com/ErikBuer/RadioPropagation.jl",
     target = "build",
-    deps   = nothing,
-    make   = nothing,
-    push_preview = true,
 )
