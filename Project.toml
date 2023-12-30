@@ -1,7 +1,7 @@
 name = "RadioPropagation"
 uuid = "b7825cb4-7108-404a-9145-f310ea34db32"
 authors = ["Erik Buer <buer94@gmail.com>"]
-version = "0.1.0"
+version = "0.1.1"
 
 [deps]
 
