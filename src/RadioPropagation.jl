@@ -33,7 +33,7 @@ module RadioPropagation
 
 	- Radar Systems Engineering Lecture 5 Propagation through the Atmosphere, IEEE New Hampshire Section IEEE AES Society, 2010
 	"""
-	function two_ray_propagation( distance, transmit_height, receive_height, frequency_hz, Γ )
+	function two_ray_propagation( distance::Real, transmit_height::Real, receive_height::Real, frequency_hz::Real, Γ::Real )::Complex
 		λ = c/frequency_hz;
 		Δϕ=  4*π*transmit_height*receive_height/(λ*distance);
 		F = 1+abs(Γ)*exp(i*Δϕ);
@@ -64,7 +64,7 @@ module RadioPropagation
 
 	- M. A. Richards and J. A. Scheer and W. A. Holm, Principles of Modern Radar, SciTech Publishing, 2010.
 	"""
-	function rain_attenuation_db_per_km( polarization::Symbol, frequency_ghz, fall_rate_mm_hour )
+	function rain_attenuation_db_per_km( polarization::Symbol, frequency_ghz::Real, fall_rate_mm_hour::Real )::Real
 		r = fall_rate_mm_hour;
 		
 		# Empirical data:
@@ -92,7 +92,7 @@ module RadioPropagation
 
 	"""
 
-		rain_attenuation_db_per_km_circular_pol( frequency_ghz, fall_rate_mm_hour )
+		rain_attenuation_db_per_km_circular_pol( frequency_ghz::Real, fall_rate_mm_hour::Real )::Real
 
 	Empirical model for rain attenuation for frequencies between 1 and 400 GHz, circular polarization.
 	Model uses closest frequency in the underlying data.
@@ -114,7 +114,7 @@ module RadioPropagation
 
 	- M. A. Richards and J. A. Scheer and W. A. Holm, Principles of Modern Radar, SciTech Publishing, 2010.
 	"""
-	function rain_attenuation_db_per_km_circular_pol( frequency_ghz, fall_rate_mm_hour )
+	function rain_attenuation_db_per_km_circular_pol( frequency_ghz::Real, fall_rate_mm_hour::Real )::Real
 		α_lin( pol ) = rain_attenuation_db_per_km( pol, frequency_ghz, fall_rate_mm_hour );
 		αv = α_lin(:vertical);
 		αh = α_lin(:horizontal);
@@ -148,7 +148,7 @@ module RadioPropagation
 
 	- M. A. Richards and J. A. Scheer and W. A. Holm, Principles of Modern Radar, SciTech Publishing, 2010.
 	"""
-	function fog_attenuation_db_per_km( frequency_ghz, M, T_deg )
+	function fog_attenuation_db_per_km( frequency_ghz::Real, M, T_deg::Real )::Real
 		T = T_deg;
 		f = frequency_ghz
 
@@ -181,7 +181,7 @@ module RadioPropagation
 
 	- Rec. ITU-R P.676-12, Attenuation by atmospheric gases and related effects, ITU-R 2020.
 	"""
-	function atmospheric_attenuation_db_per_km( frequency_ghz, T_kelvin=288.15, water_vapour_density_g_m³=7.5, dry_air_pressure_h_pa=1013.25 )
+	function atmospheric_attenuation_db_per_km( frequency_ghz::Real, T_kelvin::Real=288.15, water_vapour_density_g_m³::Real=7.5, dry_air_pressure_h_pa::Real=1013.25 )::Real
 		f = frequency_ghz;
 		T = T_kelvin;
 		ρ = water_vapour_density_g_m³;

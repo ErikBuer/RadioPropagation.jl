@@ -19,6 +19,7 @@ makedocs(
         "index.md",
         "Examples"  => Any[ 
                         "Examples/atmospheric_attenuation.md",
+                        "Examples/two-ray_propagation.md",
                     ],
     ],
     doctest  = true,
