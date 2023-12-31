@@ -35,13 +35,13 @@ plot1 = plot( target_range_m, f⁴_db.(F²1)+freespace_loss_db .-bias,
                 label   = "|F|⁴+L, Γ=-1",
                 legend  = true,
                 xaxis   =:log,
-                dpi=300)
+                dpi=300);
 plot!(  target_range_m, f⁴_db.(F²2)+freespace_loss_db .-bias,
         label   = "|F|⁴+L, Γ=-0.6",
-        xaxis   =:log )
+        xaxis   =:log );
 plot!(  target_range_m, freespace_loss_db .-bias,
         label   = "L",
-        xaxis   =:log )
+        xaxis   =:log );
 savefig("two-tay-propagation.svg"); nothing # hide
 ```
 

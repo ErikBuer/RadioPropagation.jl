@@ -19,7 +19,7 @@ plot(
     label   = "Standard",
     yaxis=:log,
     dpi=300
-)
+);
 
 
 attenuation_db_km = RadioPropagation.atmospheric_attenuation_db_per_km.( frequency_ghz, 288.15, 0 );
@@ -27,7 +27,7 @@ attenuation_db_km = RadioPropagation.atmospheric_attenuation_db_per_km.( frequen
 plot!(  frequency_ghz, attenuation_db_km,
         label = "Dry air",
         yaxis=:log,
-)
+);
 
 savefig("attenuation_example.svg"); nothing # hide
 ```

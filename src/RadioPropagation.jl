@@ -11,16 +11,16 @@ module RadioPropagation
 
 	"""
 
-		two_ray_propagation( distance, transmit_height, receive_height, frequency_hz, Γ )
+		two_ray_propagation( distance::Real, transmit_height::Real, receive_height::Real, frequency_hz::Real, Γ::Real )::Complex
 	
 	Calculate the two-way two-ray propagation between two points above a flat plane.
 	Returns the propagation factor F. The one-way power propagation factor is |F|².
 
 	# Arguments
-	- 'distance'       	The distance parallel to the plane earth.
-	- 'transmit_height'	The height of the transmitter above the plane earth.
-	- 'receive_height' 	The height of the receiver/target above the plane earth.
-	- 'Γ'             	The reflection coefficient of the medium of the plane earth.
+	- `distance`       	The distance parallel to the plane earth.
+	- `transmit_height`	The height of the transmitter above the plane earth.
+	- `receive_height` 	The height of the receiver/target above the plane earth.
+	- `Γ`             	The reflection coefficient of the medium of the plane earth.
 
 	## Examples
 
@@ -44,16 +44,16 @@ module RadioPropagation
 
 	"""
 
-		rain_attenuation_db_per_km( polarization::Symbol, frequency_ghz, fall_rate_mm_hour )
+		rain_attenuation_db_per_km( polarization::Symbol, frequency_ghz::Real, fall_rate_mm_hour::Real )::Real
 
 	Empirical model for RF rain attenuation for frequencies between 1 and 400 GHz, linear polarization.
 	Model uses the closest frequency in the underlying data.
 
 	# Arguments
 
-	- 'polarization'        The polarization, `:vertical`, `:horizontal`.
-	- 'frequency_ghz'     	The frequency of the propagating waves.
-	- 'fall_rate_mm_hour'	The rain intensity [mm/h]. 
+	- `polarization`        The polarization, `:vertical`, `:horizontal`.
+	- `frequency_ghz`     	The frequency of the propagating waves.
+	- `fall_rate_mm_hour`	The rain intensity [mm/h]. 
 
 	## Examples
 
@@ -104,8 +104,8 @@ module RadioPropagation
 
 	# Arguments
 
-	- 'frequency_ghz'     	The frequency of the propagating waves.
-	- 'fall_rate_mm_hour'	The rain intensity [mm/h]. 
+	- `frequency_ghz`     	The frequency of the propagating waves.
+	- `fall_rate_mm_hour`	The rain intensity [mm/h]. 
 
 	## Examples
 
@@ -132,16 +132,16 @@ module RadioPropagation
 
 	"""
 
-		fog_attenuation_db_per_km( frequency_ghz, M, T_deg )
+		fog_attenuation_db_per_km( frequency_ghz::Real, M, T_deg::Real )::Real
 
 	Empirical model for rain attenuation for frequencies above 5 GHz.
 	One-way attenuation in dB/km.
 
 	# Arguments
 
-	- 'frequency_ghz'	The frequency of the propagating waves.
-	- 'M'				The watewater concentration in g/m³.
-	- 'T_deg'			The air temperature in degree Celsius.
+	- `frequency_ghz`	The frequency of the propagating waves.
+	- `M`				The watewater concentration in g/m³.
+	- `T_deg`			The air temperature in degree Celsius.
 
 	## Examples
 
@@ -166,17 +166,17 @@ module RadioPropagation
 
 	"""
 
-		atmospheric_attenuation_db_per_km( frequency_ghz, T_kelvin=288.15, water_vapour_density_g_m³=7.5, dry_air_pressure_h_pa=1013.25 )
+		atmospheric_attenuation_db_per_km( frequency_ghz::Real, T_kelvin::Real=288.15, water_vapour_density_g_m³::Real=7.5, dry_air_pressure_h_pa::Real=1013.25 )::Real
 
 	Empirical model for amospheric gaseous attenuation for frequencies in the range 1 - 1000 GHz.
 	One-way attenuation in dB/km.
 
 	# Arguments
 
-	- 'frequency_ghz'				The frequency of the propagating waves.
-	- 'T_kelvin'					The absolute temperature in kelvin.
-	- 'water_vapour_density_g_m³' 	The water vapur density in g/m³.
-	- 'dry_air_pressure_h_pa' 		The dry air pressure in hpa.
+	- `frequency_ghz`				The frequency of the propagating waves.
+	- `T_kelvin`					The absolute temperature in kelvin.
+	- `water_vapour_density_g_m³` 	The water vapur density in g/m³.
+	- `dry_air_pressure_h_pa`		The dry air pressure in hpa.
 
 	## Examples
 
