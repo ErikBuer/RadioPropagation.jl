@@ -4,6 +4,6 @@ using Pkg
 Pkg.activate("docs/")
 Pkg.instantiate()
 
-LOCAL = true
+ENV["LOCAL"] = "true"
 
 include("make.jl")
