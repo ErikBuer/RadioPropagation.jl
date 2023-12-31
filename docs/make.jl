@@ -2,8 +2,11 @@ push!(LOAD_PATH,"../src/")
 
 using Documenter
 
-    # Check if LOCAL is defined; if not, set it to false
-    const LOCAL = get(ENV, "LOCAL", "false") == "true"
+
+# Running `julia --project docs/make.jl` can be very slow locally.
+# To speed it up during development, one can use make_local.jl instead.
+# The code below checks wether its being called from make_local.jl or not.
+const LOCAL = get(ENV, "LOCAL", "false") == "true"
 
 if LOCAL
     include("../src/RadioPropagation.jl")
@@ -30,5 +33,5 @@ makedocs(
 
 deploydocs(
     repo = "https://github.com/ErikBuer/RadioPropagation.jl",
-    target = "build",
+    push_preview = true,
 )
