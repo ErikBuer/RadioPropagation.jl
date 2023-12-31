@@ -1,5 +1,9 @@
 # RadioPropagation
 
+[![](https://img.shields.io/badge/docs-latest-blue.svg)](https://erikbuer.github.io/RadioPropagation.jl/dev/)
+
+Julia package implementing radio propagation models.
+
 The following is implemented:
 
 - Two-Ray propagation model.
@@ -7,23 +11,19 @@ The following is implemented:
 - Fog attenuation for frequencies above 5 GHz.
 - Atmospheric attenuation for frequencies up to 1000 GHz.
 
-Add as submodule to your project by writing the following to a terminal in the project directory:
+## Installation
 
-```bash
-git submodule add https://github.com/ErikBuer/RadioPropagation.git
+The package can be installed with the Julia package manager.
+From the Julia REPL, type `]` to enter the Pkg REPL mode and run:
+
+```pkg
+pkg> add RadioPropagation
 ```
 
-To update the submodules, write the following to a terminal in the project directory:
-
-```bash
-git submodule foreach git pull
-```
-
-To include the module in a Julia script, add the following to the file:
+Or, equivalently, via the `Pkg` API:
 
 ```julia
-push!( LOAD_PATH, "./RadioPropagation/" )
-using RadioPropagation
+julia> import Pkg; Pkg.add("RadioPropagation")
 ```
 
 ## Examples
