@@ -32,6 +32,6 @@ makedocs(
 )
 
 deploydocs(
-    repo = "https://github.com/ErikBuer/RadioPropagation.jl",
+    repo = "github.com/ErikBuer/RadioPropagation.jl.git",
     push_preview = true,
 )
