@@ -13,6 +13,7 @@ if LOCAL
     using .RadioPropagation
 else
     using RadioPropagation
+    ENV["GKSwstype"] = "100"
 end
 
 DocMeta.setdocmeta!(RadioPropagation, :DocTestSetup, :(using RadioPropagation); recursive=true)
