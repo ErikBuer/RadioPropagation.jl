@@ -25,8 +25,10 @@ module RadioPropagation
 	## Examples
 
 	```jldoctest
-	julia> two_ray_propagation( 2e3, 10, 12, 20e9, -1 )
-	1.9993946082759417 + 0.03479104696580754im
+	julia> res = two_ray_propagation( 2e3, 10, 12, 20e9, -1 );
+
+	julia> round(res, digits=6)
+	1.999395 + 0.034791im
 	```
 
 	## References
@@ -56,8 +58,10 @@ module RadioPropagation
 	## Examples
 
 	```jldoctest
-	julia> rain_attenuation_db_per_km( :vertical , 30, 20 )
-	3.3400000000000003
+	julia> res = rain_attenuation_db_per_km( :vertical , 30, 20 );
+
+	julia> round(res, digits=6)
+	3.34
 	```
 
 	## References
@@ -106,8 +110,10 @@ module RadioPropagation
 	## Examples
 
 	```jldoctest
-	julia> rain_attenuation_db_per_km_circular_pol( 30, 20 )
-	3.6755027981960815
+	julia> res = rain_attenuation_db_per_km_circular_pol( 30, 20 );
+
+	julia> round(res, digits=6)
+	3.675503
 	```
 
 	## References
@@ -140,7 +146,9 @@ module RadioPropagation
 	## Examples
 
 	```jldoctest
-	julia> fog_attenuation_db_per_km( 10, 0.8, 23 )
+	julia> res = fog_attenuation_db_per_km( 10, 0.8, 23 );
+
+	julia> round(res, digits=6)
 	4.68976
 	```
 
@@ -173,8 +181,10 @@ module RadioPropagation
 	## Examples
 
 	```jldoctest
-	julia> atmospheric_attenuation_db_per_km( 22 )
-	0.18733725630231204
+	julia> res = atmospheric_attenuation_db_per_km( 22 );
+
+	julia> round(res, digits=6)
+	0.187337
 	```
 
 	## References

@@ -2,6 +2,9 @@ push!(LOAD_PATH,"../src/")
 
 using Documenter
 
+    # Check if LOCAL is defined; if not, set it to false
+    const LOCAL = get(ENV, "LOCAL", "false") == "true"
+
 if LOCAL
     include("../src/RadioPropagation.jl")
     using .RadioPropagation
