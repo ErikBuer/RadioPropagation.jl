@@ -15,7 +15,7 @@ plot(
     label   = &quot;Standard&quot;,
     yaxis=:log,
     dpi=300
-)
+);
 
 
 attenuation_db_km = RadioPropagation.atmospheric_attenuation_db_per_km.( frequency_ghz, 288.15, 0 );
@@ -23,7 +23,7 @@ attenuation_db_km = RadioPropagation.atmospheric_attenuation_db_per_km.( frequen
 plot!(  frequency_ghz, attenuation_db_km,
         label = &quot;Dry air&quot;,
         yaxis=:log,
-)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">qt.qpa.xcb: could not connect to display
+);</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">qt.qpa.xcb: could not connect to display
 qt.qpa.plugin: From 6.5.0, xcb-cursor0 or libxcb-cursor0 is needed to load the Qt xcb platform plugin.
 qt.qpa.plugin: Could not load the Qt platform plugin &quot;xcb&quot; in &quot;&quot; even though it was found.
 This application failed to start because no Qt platform plugin could be initialized. Reinstalling the application may fix this problem.
@@ -35,4 +35,4 @@ connect: Connection refused
 GKS: can&#39;t connect to GKS socket application
 
 GKS: Open failed in routine OPEN_WS
-GKS: GKS not in proper state. GKS must be either in the state WSOP or WSAC in routine ACTIVATE_WS</code></pre><p><img src="../attenuation_example.svg" alt="Atmostpheric attenuation image"/></p><h2 id="References"><a class="docs-heading-anchor" href="#References">References</a><a id="References-1"></a><a class="docs-heading-anchor-permalink" href="#References" title="Permalink"></a></h2><p>[1] Rec. ITU-R P.676-12, Attenuation by atmospheric gases and related effects, ITU-R 2020.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../../">« RadioPropagation.jl Documentation</a><a class="docs-footer-nextpage" href="../two-ray_propagation/">Two-Ray Propagation »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="auto">Automatic (OS)</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.2.1 on <span class="colophon-date" title="Sunday 31 December 2023 11:57">Sunday 31 December 2023</span>. Using Julia version 1.6.7.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+GKS: GKS not in proper state. GKS must be either in the state WSOP or WSAC in routine ACTIVATE_WS</code></pre><p><img src="../attenuation_example.svg" alt="Atmostpheric attenuation image"/></p><h2 id="References"><a class="docs-heading-anchor" href="#References">References</a><a id="References-1"></a><a class="docs-heading-anchor-permalink" href="#References" title="Permalink"></a></h2><p>[1] Rec. ITU-R P.676-12, Attenuation by atmospheric gases and related effects, ITU-R 2020.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../../">« RadioPropagation.jl Documentation</a><a class="docs-footer-nextpage" href="../two-ray_propagation/">Two-Ray Propagation »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="auto">Automatic (OS)</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.2.1 on <span class="colophon-date" title="Sunday 31 December 2023 12:36">Sunday 31 December 2023</span>. Using Julia version 1.6.7.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
