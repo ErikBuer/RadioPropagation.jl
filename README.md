@@ -1,4 +1,4 @@
-# RadioPropagation
+# RadioPropagation.jl
 
 [![](https://img.shields.io/badge/docs-latest-blue.svg)](https://erikbuer.github.io/RadioPropagation.jl/dev/)
 
